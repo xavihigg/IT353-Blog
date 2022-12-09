@@ -1,5 +1,8 @@
+from http.client import HTTPResponse
 from django.views import generic
 from .models import Post
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect
 
 
 class PostList(generic.ListView):
@@ -9,3 +12,13 @@ class PostList(generic.ListView):
 class PostDetail(generic.DetailView):
     model = Post
     template_name = 'post_detail.html'
+
+def my_login_view(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return HttpResponseRedirect('/success/')
+    else:
+        return HTTPResponse('Invalid login')
