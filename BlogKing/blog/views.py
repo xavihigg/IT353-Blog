@@ -24,17 +24,13 @@ class UserCreationForm(forms.Form):
 def Register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
             Username = form.cleaned_data['Username']
             Password = form.cleaned_data['Password']
-            user = User.objects.create_user(Username, 'test@gmail.com', Password)
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL
-            return HttpResponseRedirect('/admin/')
+            #unsure if we'll use emails, so prepoulate the argument with a placeholder
+            user = User.objects.create_user(Username, 'placeholder@gmail.com', Password)
+            return HttpResponseRedirect('/login/')
 
-    # if a GET (or any other method) we'll create a blank form
     else:
         form = UserCreationForm()
 
