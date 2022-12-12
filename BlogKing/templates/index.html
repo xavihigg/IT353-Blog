@@ -23,33 +23,35 @@
               <div class="row">
                 <div class=" col-md-8 col-md-10 mx-auto">
                   <div class="site-heading">
-                    <h3 class=" site-heading my-4 mt-3 text-white"> Welcome to my awesome Blog </h3>
-                    <p class="text-light">We Love Django As much as you do..! &nbsp
+                    <h3 style="text-align:center; color:White; font-size:300%;">Blog Central</h3>
+                    <p style="text-align:center; line-height: 0px; color:White;">A new home for sharing your blogs!
                     </p>
-                </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-              </header>
-        
-            <div class="container">
-                <div class="row">
-      
-              <!-- Blog Entries Column -->
-              <div class="col-md-8 mt-3 left">
-                    {% for post in post_list %}
-                <div class="card mb-4" >
-                  <div class="card-body">
-                    <h2 class="card-title">{{ post.title }}</h2>
-                    <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+					<a href="/login" class="button" style="position:absolute; left:88%; top:10%; border:none; background-color:none; color:white; text-decoration:none; font-weight:bold;">Login</a>
+					<a href="/register" class="button" style="position:absolute; left:100%; top:10%; border:none; background-color:none; color:white; text-decoration:none; font-weight:bold;">Register</a>
+					</div>
+						</div>
+					  </div>
+					</div>
+				</div>
+				  </header>
 
-                    <p class="card-text">{{post.content|slice:":200" }}</p>
-                    <a href="{% url 'post_detail' post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
-                  </div>
-                 
-                </div>
-                {% endfor %}
+				<div class="container">
+					<div class="row">
+
+				  <!-- Blog Entries Column -->
+				  <div class="col-md-8 mt-3 left">
+						{% for post in post_list %}
+					<div class="card mb-4" >
+					  <div class="card-body">
+						<h2 class="card-title">{{ post.title }}</h2>
+						<p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+
+						<p class="card-text">{{post.content|slice:":200" }}</p>
+						<a href="{% url 'post_detail' post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
+					  </div>
+
+					</div>
+					{% endfor %}
             </div>
                 {% block sidebar %}
                 {% include 'sidebar.html' %}
