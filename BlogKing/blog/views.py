@@ -1,8 +1,9 @@
 from http.client import HTTPResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from .models import Post
-from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -37,11 +38,20 @@ def Register(request):
     return render(request, 'register.html', {'form':form})
 
 def my_login_view(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return HttpResponseRedirect('/success/')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.success(request, ("There was an error logging in, try again."))
+            return redirect('login')
     else:
-        return HTTPResponse('Invalid login')
+        return render(request,'login.html', {})
+
+def my_logout_view(request):
+	logout(request)
+	messages.success(request, ("You Were Logged Out!"))
+	return redirect('home')
