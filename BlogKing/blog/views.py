@@ -44,10 +44,10 @@ def my_login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return HttpResponseRedirect('/')
         else:
             messages.success(request, ("There was an error logging in, try again."))
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/login')
     else:
         return render(request,'login.html', {})
 
