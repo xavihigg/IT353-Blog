@@ -1,85 +1,74 @@
 {% extends "base.html" %}
       
- {% block content %}
-<style>
-    
-    body {
-        font-family: "Roboto", sans-serif;
-        font-size: 18px;
-        background-color: #fdfdfd;
-    }
-
-    .head_text{
+{% block content %}
+<style>   
+body {
+	font-family: "Roboto", sans-serif;
+	font-size: 18px;
+	background-color: #fdfdfd;
+}
+.head_text{
     color: white;
   }
-    .card{
+.card{
     box-shadow: 0 16px 48px #E3E7EB;
 }
 </style>
 
-    <header class="masthead" >
-            <div class="overlay"></div>
-            <div class="container">
-              <div class="row">
-                <div class=" col-md-8 col-md-10 mx-auto">
-                  <div class="site-heading">
-                    <h3 style="text-align:center; color:White; font-size:300%;">Blog Central</h3>
-                    <p style="text-align:center; line-height: 0px; color:White;">A new home for sharing your blogs!
-                    </p>
-					{% if user.is_authenticated %}
-						<a href="/logout" class="button" style="position:absolute; left:94%; top:10%; border:none; background-color:none; color:white; text-decoration:none; font-weight:bold;">Logout</a>
-					{% else %}
-					    <a href="/login" class="button" style="position:absolute; left:88%; top:10%; border:none; background-color:none; color:white; text-decoration:none; font-weight:bold;">Login</a>
-						<a href="/register" class="button" style="position:absolute; left:100%; top:10%; border:none; background-color:none; color:white; text-decoration:none; font-weight:bold;">Register</a>
-					{% endif %}
-					</div>
-						</div>
-					  </div>
+<header class="masthead" >
+	<div class="overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class=" col-md-8 col-md-10 mx-auto">
+					<div class="site-heading">
+						<h3 style="text-align:center; color:White; font-size:300%;">Blog Central</h3>
+						<p style="text-align:center; line-height: 0px; color:White;">A new home for sharing your blogs!
+						</p>
 					</div>
 				</div>
-				  </header>
-			{% if user.is_authenticated %}
-			<a href="/newblog" class="btn btn-primary" style="position:absolute; left:1.5%; top:25%; background-color:green; font-weight:bold">New Blog</a>
-			{% endif %}
-				<div class="container">
-					<div class="row">
+			</div>
+	</div>
+</header>
+{% if user.is_authenticated %}
+<div class="container align-items-end">
+	<a href="/post_create" class="btn btn-primary " style="background-color:green; font-weight:bold">New Blog</a>
+<div>
 
-				  <!-- Blog Entries Column -->
-				  <div class="col-md-8 mt-3 left">
-					{% if user.is_authenticated %}
-						{% for post in post_list %}
-					  	    {% if post.author == user.get_username %}
-							<div class="card mb-4" >
-							  <div class="card-body">
+{% endif %}
+	<div class="container">
+		<div class="row">
+			<!-- Blog Entries Column -->
+			<div class="col-md-8 mt-3 ">
+				{% if user.is_authenticated %}
+					{% for post in post_list %}
+						{% if post.author == user %}
+						<div class="card mb-4" >
+							<div class="card-body">
 								<h2 class="card-title">{{ post.title }}</h2>
 								<p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
 
 								<p class="card-text">{{post.content|slice:":200" }}</p>
 								<a href="{% url 'post_detail' post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
-								<a href="[Link to page to edit blog]" class="btn btn-primary">Edit</a>
-							    <a href="[Link to view to delete the blog]" class="btn btn-primary">Delete</a>
-							  </div>
+								<a href="{% url 'post_edit' post.slug %}" class="btn btn-primary">Edit</a>
+								<a href="{% url 'post_delete' post.slug %}" class="btn btn-primary">Delete</a>
 							</div>
-					  		{% endif %}
-						{% endfor %}
-					{% else %}
-					  {% for post in post_list %}
-							<div class="card mb-4" >
-							  <div class="card-body">
+						</div>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					{% for post in post_list %}
+						<div class="card mb-4" >
+							<div class="card-body">
 								<h2 class="card-title">{{ post.title }}</h2>
 								<p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
 
 								<p class="card-text">{{post.content|slice:":200" }}</p>
 								<a href="{% url 'post_detail' post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
-							  </div>
 							</div>
-					  {% endfor %}
-					{% endif %}
-					 
-            </div>
-                {% block sidebar %}
-                {% include 'sidebar.html' %}
-                {% endblock sidebar %}
-            </div>
-        </div>
+						</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+    </div>
 {%endblock%}
