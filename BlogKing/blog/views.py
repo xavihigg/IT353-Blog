@@ -47,7 +47,7 @@ def my_login_view(request):
             return redirect('home')
         else:
             messages.success(request, ("There was an error logging in, try again."))
-            return redirect('login')
+            return HttpResponseRedirect('/')
     else:
         return render(request,'login.html', {})
 
