@@ -54,4 +54,4 @@ def my_login_view(request):
 def my_logout_view(request):
 	logout(request)
 	messages.success(request, ("You Were Logged Out!"))
-	return redirect('home')
+	return HttpResponseRedirect('/')
