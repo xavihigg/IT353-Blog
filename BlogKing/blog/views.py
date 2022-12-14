@@ -1,16 +1,25 @@
 from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 from django.views import generic
+from django.views.generic import CreateView, UpdateView, DeleteView
 from .models import Post
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
+from .forms import PostForm
 
 
 class PostList(generic.ListView):
-    queryset = Post.objects.filter(status=1).order_by('-created_on')
+    def get_queryset(self):
+        if(self.request.user.is_authenticated):
+            return Post.objects.filter(author=self.request.user).order_by('-created_on')   
+        else:
+            return Post.objects.filter(status=1).order_by('-created_on')   
+         
+    
     template_name = 'index.html'
 
 class PostDetail(generic.DetailView):
@@ -20,6 +29,28 @@ class PostDetail(generic.DetailView):
 class UserCreationForm(forms.Form):
     Username = forms.CharField(label='Username', max_length=64)
     Password = forms.CharField(label='Password', max_length=32)
+
+class PostCreateForm(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post_create.html'
+    #fields = ['title', 'slug', 'content', 'status']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(PostCreateForm, self).form_valid(form)
+
+class PostEditForm(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post_edit.html'
+    #fields = ['title', 'slug', 'content', 'status']
+
+class PostDeleteForm(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('home')
+
 
 
 def Register(request):
